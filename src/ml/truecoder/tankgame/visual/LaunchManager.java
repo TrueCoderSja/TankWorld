@@ -3,18 +3,12 @@ package ml.truecoder.tankgame.visual;
 import java.util.ArrayList;
 import java.util.List;
 
-import ml.truecoder.tankgame.exceptions.CoordinatesOutOfScreenRangeException;
-
 public class LaunchManager {
 	private static List<Launch> launches=new ArrayList<Launch>();
 	private static int currentIndex;
 	
 	public static void register(int x, int y, int direction, Tank tank) {
-		try {
-			launches.add(new Launch(x, y, direction, tank));
-		} catch (CoordinatesOutOfScreenRangeException e) {
-			e.printStackTrace();
-		}
+		launches.add(new Launch(x, y, direction, tank));
 	}
 	
 	public static Launch getLaunch() {

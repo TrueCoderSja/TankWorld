@@ -22,4 +22,11 @@ public class PlayerLayer extends Layer {
 		}
 		return new Object[] {actors.get(currentIndex), actors.get(currentIndex++).getCoords()};
 	}
+	
+	public void removePlayer(Actor actor) {
+		if(actors.indexOf(actor)!=-1) {
+			actors.remove(actor);
+			len--;
+		}
+	}
 }

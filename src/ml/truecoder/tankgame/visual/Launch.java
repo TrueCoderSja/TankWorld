@@ -1,7 +1,6 @@
 package ml.truecoder.tankgame.visual;
 
 import ml.truecoder.tankgame.GameData;
-import ml.truecoder.tankgame.exceptions.CoordinatesOutOfScreenRangeException;
 import ml.truecoder.tankgame.nativecode.Graphic;
 import ml.truecoder.tankgame.nativecode.GraphicsFactory;
 import ml.truecoder.tankgame.spares.Weapon;
@@ -17,7 +16,7 @@ public class Launch implements GameData{
 	private int weaponWidth;
 	private int weaponHeight;
 	
-	Launch(int xTileIndex, int yTileIndex, int direction, Tank tank) throws CoordinatesOutOfScreenRangeException {
+	Launch(int xTileIndex, int yTileIndex, int direction, Tank tank) {
 		Layer layer=world.getXlargestLayer();
 		int tileWidth=world.getXlargestLayer().getTileWidth(), tileHeight=world.getYlargestLayer().getTileHeight();
 		int xOffset=(tank.getWidth()%2==0)?tank.getWidth()/2:tank.getWidth()/2+1;

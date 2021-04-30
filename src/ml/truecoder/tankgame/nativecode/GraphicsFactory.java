@@ -15,11 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import ml.truecoder.tankgame.GameData;
-import ml.truecoder.tankgame.exceptions.CoordinatesOutOfScreenRangeException;
 import ml.truecoder.tankgame.exceptions.NoSpriteWithIDException;
 import ml.truecoder.tankgame.nogui.Utilities;
 import ml.truecoder.tankgame.visual.Layer;
 import ml.truecoder.tankgame.visual.Actor;
+import ml.truecoder.tankgame.visual.AutoDeleteActor;
 import ml.truecoder.tankgame.visual.Launch;
 import ml.truecoder.tankgame.visual.LaunchManager;
 import ml.truecoder.tankgame.visual.PlayerLayer;
@@ -147,6 +147,10 @@ public class GraphicsFactory extends JPanel implements MouseListener, MouseMotio
 							 if(val==actorSprite.getFramesLength()) {
 								 frameCount=0;
 								 val=0;
+								 if(actor instanceof AutoDeleteActor) {
+									 playerlayer.removePlayer(actor);
+									 continue;
+								 }
 							 }
 							 else
 								 val++;
@@ -166,9 +170,7 @@ public class GraphicsFactory extends JPanel implements MouseListener, MouseMotio
 					 } catch (NoSpriteWithIDException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					 } catch (CoordinatesOutOfScreenRangeException e) {
-						//Do Nothing
-					}
+					 }
 				 }
 			 }			 
 		 }

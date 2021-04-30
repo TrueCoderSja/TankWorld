@@ -6,9 +6,7 @@ import java.util.Scanner;
 
 import ml.truecoder.tankgame.GameData;
 import ml.truecoder.tankgame.exceptions.CoordinatesNotSetException;
-import ml.truecoder.tankgame.exceptions.CoordinatesOutOfScreenRangeException;
 import ml.truecoder.tankgame.exceptions.TileMapLengthsUnequalException;
-import ml.truecoder.tankgame.nativecode.GraphicsFactory;
 
 public class Layer implements GameData {
 	private int tileWidth, tileHeight;
@@ -221,41 +219,17 @@ public class Layer implements GameData {
 		return max[1];
 	}
 	
-	public int getXpix(int xTileIndex) throws CoordinatesOutOfScreenRangeException {
+	public int getXpix(int xTileIndex) {
 		if(!coordCalled)
 			throw new CoordinatesNotSetException();
 		int xPix=centerCoord[0]+(xTileIndex*tileWidth);
-		if(xPix==GraphicsFactory.getStartingX()) {
-			int nextXPix=centerCoord[0]+((xTileIndex+1)*tileWidth);
-			if(nextXPix==xPix)
-				throw new CoordinatesOutOfScreenRangeException();
-		}
-		else if(xPix==GraphicsFactory.getEndingX()) {
-			int prevXPix=centerCoord[0]+((xTileIndex-1)*tileWidth);
-			if(prevXPix==xPix)
-				throw new CoordinatesOutOfScreenRangeException();
-		}
-		else if(xPix>GraphicsFactory.getEndingX() || xPix<GraphicsFactory.getStartingX())
-			throw new CoordinatesOutOfScreenRangeException();
 		return xPix;
 	}
 	
-	public int getYpix(int yTileIndex) throws CoordinatesOutOfScreenRangeException {
+	public int getYpix(int yTileIndex) {
 		if(!coordCalled)
 			throw new CoordinatesNotSetException();
 		int yPix=centerCoord[1]-(yTileIndex*tileHeight);
-		if(yPix==GraphicsFactory.getStartingY()) {
-			int nextYPix=centerCoord[1]-((yTileIndex-1)*tileHeight);
-			if(yPix==nextYPix)
-				throw new CoordinatesOutOfScreenRangeException();
-		}
-		else if(yPix==GraphicsFactory.getEndingY()) {
-			int prevYPix=centerCoord[1]-((yTileIndex+1)*tileHeight);
-			if(yPix==prevYPix)
-				throw new CoordinatesOutOfScreenRangeException();
-		}
-		else if(yPix<GraphicsFactory.getStartingY() || yPix>GraphicsFactory.getEndingY())
-			throw new CoordinatesOutOfScreenRangeException();
 		return yPix;
 	}
 	

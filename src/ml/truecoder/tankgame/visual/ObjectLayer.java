@@ -69,6 +69,10 @@ public class ObjectLayer extends Layer {
 				removeTile(x, y);
 			}
 		}
-		world.getPrimaryActorLayer().addPlayer(new Actor(explodeSpriteID, new int[] {lowerX, upperY}));
+		int x=lowerX+(upperX-lowerX)/2;
+		x=((upperX-lowerX)%2==0)?x:x+1;
+		int y=lowerY+(upperY-lowerY)/2;
+		y=((upperY-lowerY)%2==0)?y:y+1;
+		world.getPrimaryActorLayer().addPlayer(new AutoDeleteActor(explodeSpriteID, new int[] {x, y}));
 	}
 }
