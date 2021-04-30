@@ -16,7 +16,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import ml.truecoder.tankgame.nogui.Utilities;
 
 public class Speaker {
-	private static boolean muted=true;
+	private static boolean muted=false;
 	private static HashMap<String, ByteArrayOutputStream> audios=new HashMap<String, ByteArrayOutputStream>();
 	
 	public static void init(String audioListPath) {

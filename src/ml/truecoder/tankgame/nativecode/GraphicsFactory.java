@@ -103,7 +103,32 @@ public class GraphicsFactory extends JPanel implements MouseListener, MouseMotio
 							}
 						}
 						if(tileID>0) {
-							g.drawImage(TileManager.getTile(tileID).tile.val, xPix, yPix, tileWidth, tileHeight, null);
+							Graphic graphic=TileManager.getTile(tileID).tile;
+							String transistionData=layer.getTileTransistion(xTileIndex, yTileIndex);
+							if(transistionData!=null) {
+							int times=transistionData.charAt(0);
+								char transistion=transistionData.charAt(1);
+								switch(transistion) {
+								case 'L':
+									for(int i=0;i<times;i++)
+										graphic=graphic.rotateImage(-90);
+									break;
+								case 'R':
+									for(int i=0;i<times;i++)
+										graphic=graphic.rotateImage(90);
+									break;
+								case 'V':
+									for(int i=0;i<times;i++)
+										graphic=graphic.flipVert(graphic);
+									break;
+								case 'H':
+									for(int i=0;i<times;i++)
+										graphic=graphic.flipHoriz(graphic);
+									break;
+								}
+							}
+							
+							g.drawImage(graphic.val, xPix, yPix, tileWidth, tileHeight, null);
 							//g.drawRect(xPix, yPix, tileWidth, tileHeight);
 						}
 						else if(tileID==-1) {

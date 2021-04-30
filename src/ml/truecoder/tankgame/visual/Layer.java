@@ -9,12 +9,25 @@ import ml.truecoder.tankgame.exceptions.CoordinatesNotSetException;
 import ml.truecoder.tankgame.exceptions.TileMapLengthsUnequalException;
 
 public class Layer implements GameData {
+	//Transistion Constants
+//	private final String ROTATE_LEFT="60";
+//	private final String ROTATE_LEFT_2="C0";
+//	private final String ROTATE_LEFT_3="12";
+//	private final String ROTATE_RIGHT="A0";
+//	private final String ROTATE_RIGHT_2="14";
+//	private final String ROTATE_RIGHT_3="1E";
+//	private final String FLIPPED_V="80";
+//	private final String FLIPPED_H="40";
+	private static final String[] transKeys= {"60", "C0", "12", "A0", "14", "1E", "80", "40"};
+	private static final String[] transVals= {"1L", "2L", "3L", "1R", "2R", "3R", "1V", "1H"};
+	
 	private int tileWidth, tileHeight;
 	private boolean isCollidable;
 	private int xTiles, yTiles;
 	
 	//TileMap Fields
 	private int[][] rawMap;
+	private String[][] transistions;
 	private int[] center, min, max;
 	public int[] centerCoord;
 	private int x, y;
@@ -37,7 +50,7 @@ public class Layer implements GameData {
 		if(tileWidth>0 && tileHeight>0) {
 			this.tileWidth=tileWidth;
 			this.tileHeight=tileHeight;
-			setTileMap(tileMap);
+			setTileMap(tileMap, new String[tileMap.length][tileMap[0].length]);
 		}
 	}
 	
@@ -45,23 +58,46 @@ public class Layer implements GameData {
 		if(tileWidth>0 && tileHeight>0) {
 			this.tileWidth=tileWidth;
 			this.tileHeight=tileHeight;
-			setTileMap(cookLyr(plainLyrFile));
+			Object[] data=cookLyr(plainLyrFile);
+			int[][] tileMap=(int[][]) data[0];
+			String[][] trans=(String[][]) data[1];
+			setTileMap(tileMap, trans);
 		}
 	}
 	
 	//House Methods
-	public int[][] cookLyr(InputStream lyr) throws TileMapLengthsUnequalException {
+	public Object[] cookLyr(InputStream lyr) throws TileMapLengthsUnequalException {
 		Scanner lineReader=new Scanner(lyr);
 		Scanner idReader;
 		ArrayList<ArrayList<Integer>> tileMap=new ArrayList<ArrayList<Integer>>();
+		ArrayList<ArrayList<String>> transistions=new ArrayList<ArrayList<String>>();
 		int x=0, y;
 		while(lineReader.hasNextLine()) {
 			ArrayList<Integer> tmp=new ArrayList<Integer>();
+			ArrayList<String> tmpTrans=new ArrayList<String>();
 			y=0;
 			String line=lineReader.nextLine();
 			idReader=new Scanner(line);
-			while(idReader.hasNextInt()) {
-				tmp.add(idReader.nextInt());
+			while(idReader.hasNextLong()) {
+				long val=idReader.nextLong();
+				int id;
+				String transistion=null;
+				if(val>TileManager.getNoOfTiles()) {
+					String hex=Long.toHexString(val).toUpperCase();
+					id=-1;
+					for(int i=0;i<transKeys.length;i++) {
+						if(hex.startsWith(transKeys[i])) {
+							transistion=transVals[i];
+							String suffix=(transKeys[i].charAt(1)=='0')?"000000":"0000000";
+							id=(int)(val-Long.valueOf(transKeys[i]+suffix, 16));
+							break;
+						}
+					}
+				}
+				else
+					id=(int)val;
+				tmp.add(id);
+				tmpTrans.add(transistion);
 				y++;
 			}
 			idReader.close();
@@ -73,15 +109,21 @@ public class Layer implements GameData {
 			yTiles=y;
 			x++;
 			tileMap.add(tmp);
+			transistions.add(tmpTrans);
 		}
 		xTiles=x;
 		lineReader.close();
 		int[][] rawMap=new int[xTiles][yTiles];
+		String[][] transistionsF=new String[xTiles][yTiles];
 		int i=0;
 		for(ArrayList<Integer> tmp:tileMap) {
 			rawMap[i++]=tmp.stream().mapToInt(j->j).toArray();;
 		}
-		return rawMap;
+		i=0;
+		for(ArrayList<String> tmp:transistions) {
+			transistionsF[i++]=tmp.stream().toArray(String[]::new);
+		}
+		return new Object[] {rawMap, transistionsF};
 	}
 	
 	public void setCoord(int xCoord, int yCoord) {
@@ -117,8 +159,21 @@ public class Layer implements GameData {
 		}
 	}
 	
+	public String getTileTransistion(int x, int y) {
+		if((x<min[0] || x>max[0]) || (y<min[1] || y>max[1]))
+		{
+			return null;
+			//TODO throw new exception here
+		} 
+		else {
+			int xC=getAbsX(x);
+			int yC=getAbsY(y);
+			return transistions[yC][xC];
+		}
+	}
+	
 	//Setters
-	public boolean setTileMap(int[][] tileMap) {
+	public boolean setTileMap(int[][] tileMap, String[][] transistions) {
 		if(tileMap.length>0 && tileMap[0].length>0) {
 			center=new int[2];
 			max=new int[2];
@@ -126,6 +181,7 @@ public class Layer implements GameData {
 			xTiles=tileMap.length;
 			yTiles=tileMap[0].length;
 			this.rawMap=tileMap;
+			this.transistions=transistions;
 			x=rawMap[0].length;
 			y=rawMap.length;
 			xODD=!(x%2==0);

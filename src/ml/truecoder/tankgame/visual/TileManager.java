@@ -8,6 +8,9 @@ import ml.truecoder.tankgame.GameData;
 import ml.truecoder.tankgame.nogui.Utilities;
 
 public class TileManager implements GameData {
+	
+	private static int maxID;
+	
 	private static ArrayList<TileSheet> tileSheets=new ArrayList<TileSheet>();
 	public static Tile getTile(int id) {
 		for(TileSheet tileSheet:tileSheets) {
@@ -24,6 +27,10 @@ public class TileManager implements GameData {
 			}
 		}
 		return null;
+	}
+	
+	public static int getNoOfTiles() {
+		return maxID;
 	}
 	public static void init() {
 		//Map Data
@@ -48,6 +55,9 @@ public class TileManager implements GameData {
 			int tile_height=Integer.parseInt(entry[3]);
 			TileSheet sheet=new TileSheet("TileSheets"+File.separator+entry[4], lowerLimit, upperLimit, tile_width, tile_height);
 			tileSheets.add(sheet);
+			
+			//Update max ID
+			maxID=(upperLimit>maxID)?upperLimit:maxID;
 		}
 		
 //		//Load tiles in ram

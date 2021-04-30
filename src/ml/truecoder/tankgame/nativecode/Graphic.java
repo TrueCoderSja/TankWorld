@@ -68,4 +68,22 @@ public class Graphic {
 
 	    return new Graphic(rotated);
 	}
+	
+	public Graphic flipHoriz(Graphic graphic) {
+		BufferedImage image=graphic.val;
+	    BufferedImage newImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+	    Graphics2D gg = newImage.createGraphics();
+	    gg.drawImage(image, image.getHeight(), 0, -image.getWidth(), image.getHeight(), null);
+	    gg.dispose();
+	    return new Graphic(newImage);
+	}
+	
+	public Graphic flipVert(Graphic graphic) {
+		BufferedImage image=graphic.val;
+	    BufferedImage newImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+	    Graphics2D gg = newImage.createGraphics();
+	    gg.drawImage(image, -image.getHeight(), 0, image.getWidth(), image.getHeight(), null);
+	    gg.dispose();
+	    return new Graphic(newImage);
+	}
 }

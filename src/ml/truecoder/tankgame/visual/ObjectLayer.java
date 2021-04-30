@@ -2,6 +2,8 @@ package ml.truecoder.tankgame.visual;
 
 import java.io.InputStream;
 
+import ml.truecoder.tankgame.nativecode.Speaker;
+
 public class ObjectLayer extends Layer {
 	int explodeSpriteID;
 	
@@ -73,6 +75,7 @@ public class ObjectLayer extends Layer {
 		x=((upperX-lowerX)%2==0)?x:x+1;
 		int y=lowerY+(upperY-lowerY)/2;
 		y=((upperY-lowerY)%2==0)?y:y+1;
+		Speaker.play("explosion.wav");
 		world.getPrimaryActorLayer().addPlayer(new AutoDeleteActor(explodeSpriteID, new int[] {x, y}));
 	}
 }

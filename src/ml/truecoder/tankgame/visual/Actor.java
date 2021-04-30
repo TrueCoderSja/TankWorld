@@ -7,6 +7,7 @@ public class Actor implements GameData, ControllerListener {
 	private int spriteID;
 	protected int speed;
 	private int x, y;
+	private int width, height;
 	protected int direction;
 	
 	public Actor(int spriteID, int[] coords) {
@@ -14,6 +15,8 @@ public class Actor implements GameData, ControllerListener {
 		x=coords[0];
 		y=coords[1];
 		speed=1;
+		width=SpriteManager.getSpriteWidth(spriteID);
+		height=SpriteManager.getSpriteHeight(spriteID);
 		Controller.addListener(this);
 	}
 	

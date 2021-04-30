@@ -22,7 +22,7 @@ public class Invoker implements GameData {
 		world.addLayer(l2);
 		world.addLayer(l3);
 		//l2.setCollidable(true);
-		Tank tank=new Tank(2, new int[2], 41);
+		Tank tank=new Tank(1, new int[2], 41);
 		world.setTank(tank);
 		PlayerLayer l4=new PlayerLayer();
 		l4.addPlayer(tank);
