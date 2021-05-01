@@ -19,7 +19,7 @@ public class Layer implements GameData {
 //	private final String FLIPPED_V="80";
 //	private final String FLIPPED_H="40";
 	private static final String[] transKeys= {"60", "C0", "12", "A0", "14", "1E", "80", "40"};
-	private static final String[] transVals= {"1L", "2L", "3L", "1R", "2R", "3R", "1V", "1H"};
+	private static final String[] transVals= {"1L", "2L", "3L", "1R", "2R", "3R", "1H", "1V"};
 	
 	private int tileWidth, tileHeight;
 	private boolean isCollidable;
@@ -84,7 +84,7 @@ public class Layer implements GameData {
 				String transistion=null;
 				if(val>TileManager.getNoOfTiles()) {
 					String hex=Long.toHexString(val).toUpperCase();
-					id=-1;
+					id=-2;
 					for(int i=0;i<transKeys.length;i++) {
 						if(hex.startsWith(transKeys[i])) {
 							transistion=transVals[i];

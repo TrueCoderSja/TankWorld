@@ -14,7 +14,7 @@ public class ObjectLayer extends Layer {
 	}
 	
 	public void destroy(int xTileIndex, int yTileIndex) {
-		int upperX=0, lowerX=xTileIndex, upperY=yTileIndex, lowerY=yTileIndex;
+		int upperX=xTileIndex, lowerX=xTileIndex, upperY=yTileIndex, lowerY=yTileIndex;
 		upperScanner:
 		for(int y=yTileIndex;;y++) {
 			boolean started=false;

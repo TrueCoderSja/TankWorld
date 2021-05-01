@@ -92,8 +92,8 @@ public class GraphicsFactory extends JPanel implements MouseListener, MouseMotio
 						xTileIndex=world.X()+xTileCount-xBackCount;
 						yTileIndex=world.Y()-yTileCount+yBackCount;
 						tileID=layer.getTileId(xTileIndex, yTileIndex);
-						if(xTileIndex==0 && yTileIndex==0) 
-							g.drawRect(xPix, yPix, tileWidth, tileHeight);
+//						if(xTileIndex==0 && yTileIndex==0) 
+//							g.drawRect(xPix, yPix, tileWidth, tileHeight);
 						if(xTileIndex-world.X()==0 && yTileIndex-world.Y()==0) {
 							centerXpix=(tileWidth%2==1)?xPix+tileWidth/2+1:xPix+tileWidth/2;
 							centerYpix=(tileHeight%2==1)?yPix+tileHeight/2+1:yPix+tileHeight/2;
@@ -130,25 +130,25 @@ public class GraphicsFactory extends JPanel implements MouseListener, MouseMotio
 							
 							g.drawImage(graphic.val, xPix, yPix, tileWidth, tileHeight, null);
 							//g.drawRect(xPix, yPix, tileWidth, tileHeight);
+							
 						}
 						else if(tileID==-1) {
 							g.setColor(Color.BLACK);
 							g.drawRect(xPix, yPix, tileWidth, tileHeight);
 						}
-					
 //						//TODO Remove at ASAWD
-						if(xTileIndex==0) {
-							g.setColor(Color.RED);
-							g.drawString(yTileIndex+"", xPix, yPix+tileHeight);
-							g.setColor(Color.BLUE);
-							g.drawRect(xPix, yPix, tileWidth, tileHeight);
-						}
-						if(yTileIndex==0) {
-							g.setColor(Color.RED);
-							g.drawString(xTileIndex+"", xPix, yPix+tileHeight);
-							g.setColor(Color.BLUE);
-							g.drawRect(xPix, yPix, tileWidth, tileHeight);
-						}
+//						if(xTileIndex==0) {
+//							g.setColor(Color.RED);
+//							g.drawString(yTileIndex+"", xPix, yPix+tileHeight);
+//							g.setColor(Color.BLUE);
+//							g.drawRect(xPix, yPix, tileWidth, tileHeight);
+//						}
+//						if(yTileIndex==0) {
+//							g.setColor(Color.RED);
+//							g.drawString(xTileIndex+"", xPix, yPix+tileHeight);
+//							g.setColor(Color.BLUE);
+//							g.drawRect(xPix, yPix, tileWidth, tileHeight);
+//						}
 					 }
 				 }
 			 }

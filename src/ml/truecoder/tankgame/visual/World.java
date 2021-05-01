@@ -1,13 +1,16 @@
 package ml.truecoder.tankgame.visual;
 
 import java.util.List;
+
+import ml.truecoder.tankgame.GameData;
+
 import java.util.ArrayList;
 
 /**
  * @author TrueCoder
  *This class is valid for all the changes taking place
  */
-public class World {
+public class World implements GameData {
 	
 	private ArrayList<Layer> layers=new ArrayList<Layer>();
 	private int layerCount=0;
@@ -126,104 +129,34 @@ public class World {
 	}
 	
 	public void moveRight(int speed) {
-		boolean moveAllowed=true;
 		int newX=x-speed;
-		if(newX>lowerX) {
-//		for(int index:collidableLayerIndexes) {
-//			Layer layer=layers.get(index);
-//			int width=tank.getWidth(), height=tank.getHeight();
-//			int tileHeight=xLargestLayer.getTileHeight(), tileWidth=xLargestLayer.getTileWidth();
-//			int offsetY=(height%2==0)?height/2:height/2+1;
-//			int y=this.y+(offsetY/tileHeight);
-//			y=(offsetY%tileHeight==0)?y:y+1;
-//			int nY=height/tileHeight;
-//			nY=(height%tileHeight==0)?nY:nY+1;
-//			int offsetX=(width%2==0)?width/2:width/2+1;
-//			int x=newX-(offsetX/tileWidth);
-//			for(int i=y;i>y-nY;i--) {
-//				int tileID=layer.getTileId(x, i);
-//				moveAllowed=(tileID>0)?false:moveAllowed;
-//			}				
-//		}
-			if(moveAllowed) {
-				x=newX;
-				matchTankCoords();
-			}
+		if(newX>lowerX && isMoveAllowed(speed)) {
+			x=newX;
+			matchTankCoords();
 		}
 	}
 	public void moveLeft(int speed) {
-		boolean moveAllowed=true;
 		int newX=x+speed;
-		if(newX<upperX) {
-//			for(int index:collidableLayerIndexes) {
-//				Layer layer=layers.get(index);
-//				int width=tank.getWidth(), height=tank.getHeight();
-//				int tileHeight=xLargestLayer.getTileHeight(), tileWidth=xLargestLayer.getTileWidth();
-//				int offsetY=(height%2==0)?height/2:height/2+1;
-//				int y=this.y+(offsetY/tileHeight);
-//				y=(offsetY%tileHeight==0)?y:y+1;
-//				int nY=height/tileHeight;
-//				nY=(height%tileHeight==0)?nY:nY+1;
-//				int offsetX=(width%2==0)?width/2:width/2+1;
-//				int x=newX+(offsetX/tileWidth);
-//				for(int i=y;i>y-nY;i--) {
-//					int tileID=layer.getTileId(x, i);
-//					moveAllowed=(tileID>0)?false:moveAllowed;
-//				}				
-//			}
-			if(moveAllowed) {
-				x=newX;
-				matchTankCoords();
-			}
-		}		
+		if(newX<upperX && isMoveAllowed(speed)) {
+			x=newX;
+			matchTankCoords();
+		}
+		else
+			System.out.println();
 	}
 	public void moveDown(int speed) {
-		boolean moveAllowed=true;
 		int newY=y+speed;
 		if(newY<upperY) {
-//			for(int index:collidableLayerIndexes) {
-//				Layer layer=layers.get(index);
-//				int width=tank.getWidth(), height=tank.getHeight();
-//				int tileHeight=xLargestLayer.getTileHeight(), tileWidth=xLargestLayer.getTileWidth();
-//				int offsetX=(width%2==0)?width/2:width/2+1;
-//				int x=this.x+(offsetX/tileWidth);
-//				x=(offsetX%tileWidth==0)?x:x+1;
-//				int nX=width/tileWidth;
-//				nX=(width%tileWidth==0)?nX:nX+1;
-//				int offsetY=(height%2==0)?height/2:height/2+1;
-//				int y=newY+(offsetY/tileHeight);
-//				for(int i=x;i>x-nX;i--) {
-//					int tileID=layer.getTileId(i, y);
-//					moveAllowed=(tileID>0)?false:moveAllowed;
-//				}				
-//			}
-			if(moveAllowed) {
+			if(isMoveAllowed(speed)) {
 				y=newY;
 				matchTankCoords();
 			}
 		}
 	}
 	public void moveUp(int speed) {
-		boolean moveAllowed=true;
 		int newY=y-speed;
 		if(newY>lowerY) {
-//			for(int index:collidableLayerIndexes) {
-//				Layer layer=layers.get(index);
-//				int width=tank.getWidth(), height=tank.getHeight();
-//				int tileHeight=xLargestLayer.getTileHeight(), tileWidth=xLargestLayer.getTileWidth();
-//				int offsetX=(width%2==0)?width/2:width/2+1;
-//				int x=this.x+(offsetX/tileWidth);
-//				x=(offsetX%tileWidth==0)?x:x+1;
-//				int nX=width/tileWidth;
-//				nX=(width%tileWidth==0)?nX:nX+1;
-//				int offsetY=(height%2==0)?height/2:height/2+1;
-//				int y=newY-(offsetY/tileHeight);
-//				for(int i=x;i>x-nX;i--) {
-//					int tileID=layer.getTileId(i, y);
-//					moveAllowed=(tileID>0)?false:moveAllowed;
-//				}	
-//			}
-			if(moveAllowed) {
+			if(isMoveAllowed(speed)) {
 				y=newY;
 				matchTankCoords();
 			}
@@ -255,5 +188,70 @@ public class World {
 	}
 	public PlayerLayer getPrimaryActorLayer() {
 		return primaryActorLayer;
+	}
+	public boolean isMoveAllowed(int speed) {
+		int direction=tank.getDirection();
+		boolean moveAllowed=true;
+		int newCoord=(direction==UP || direction==DOWN)?y:x;
+		switch(direction) {
+		case RIGHT:
+			newCoord=x+speed;
+			break;
+		case LEFT:
+			newCoord=x-speed;
+			break;
+		case UP:
+			newCoord=y+speed;
+			break;
+		case DOWN:
+			newCoord=y-speed;
+			break;
+		}
+		for(int index:collidableLayerIndexes) {
+			Layer layer=layers.get(index);
+			int width=tank.getWidth(), height=tank.getHeight();
+			int tileHeight=xLargestLayer.getTileHeight(), tileWidth=xLargestLayer.getTileWidth();
+			int offset1 ,coord1, nT, offset2;
+			if(direction==LEFT || direction==RIGHT) {
+				offset1=(height%2==0)?height/2:height/2+1;
+				coord1=this.y+(offset1/tileHeight);
+				coord1=(offset1%tileHeight==0)?coord1:coord1+1;
+				nT=height/tileHeight;
+				nT=(height%tileHeight==0)?nT:nT+1;
+				offset2=(width%2==0)?width/2:width/2+1;
+			}
+			else {
+				offset1=(width%2==0)?width/2:width/2+1;
+				coord1=this.x+(offset1/tileWidth);
+				coord1=(offset1%tileWidth==0)?x:x+1;
+				nT=width/tileWidth;
+                nT=(width%tileWidth==0)?nT:nT+1;
+                offset2=(height%2==0)?height/2:height/2+1;
+			}
+			int coord2=0;
+			switch(direction) {
+			case RIGHT:
+				coord2=newCoord+(offset2/tileWidth);
+				break;
+			case LEFT:
+				coord2=newCoord-(offset2/tileWidth);
+				break;
+			case UP:
+				coord2=newCoord+(offset2/tileHeight);
+				break;
+			case DOWN:
+				coord2=newCoord-(offset2/tileHeight);
+				break;
+			}
+			for(int i=coord1;i>coord1-nT;i--) {
+				int tileID;
+				if(direction==LEFT || direction==RIGHT)
+					tileID=layer.getTileId(coord2, i);
+				else
+					tileID=layer.getTileId(i, coord2);
+				moveAllowed=(tileID>0)?false:moveAllowed;
+			}			
+		}
+		return moveAllowed;
 	}
 }
